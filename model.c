@@ -7,12 +7,13 @@ const int outputDim = 1;
 
 int[] topology = {2, 3, 2, 1};
 int depth = 4;
-int ** layers;
-	float error = 0;
-	float output[topoogy[depth-1]];
+float ** layers = mallac(sizeof(float*)*depth);
+float error = 0;
+float output[topoogy[depth-1]];
 float random() { return 2*(rand()/float(RAND_MAX))-1; }
 float random2() { return (rand()/float(RAND_MAX)); }
 
+float ReLU(float x) {return x>0.0 ? x:0.0;}
 float dReLU(float x) {return x>0.0 ? 1.0:0.0;}
 void printArr(int n, float arr[])
 {
@@ -39,7 +40,10 @@ void printMatrix(int n, int m, float arr[][h1Dim])
 int initialize(int* topology, int layers)
 {
   srand(time(0));
-  
+  for (int i = 0 ; i < layers ; i++){
+    int size = topology[i];
+    layer[i] = malloc(sizeof(float)*topology[i])
+  }
 }
 	void forwardProp(float input[inputDim])
 	{

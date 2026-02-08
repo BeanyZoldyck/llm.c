@@ -17,7 +17,7 @@ biases = malloc(sizeof(float) * totalB);
 // add up total amount of weights and biases
 // may regret refactoring this code like this in a minute...
 float error = 0;
-float output[topoogy[depth-1]];
+float output[topology[depth-1]];
 float random() { return 2*(rand()/float(RAND_MAX))-1; }
 float random2() { return (rand()/float(RAND_MAX)); }
 
@@ -164,18 +164,12 @@ int initialize(int* topology, int layers)
 
 	void setZero() 
 	{
-		for (int i = 0; i < h1Dim; i++)
-		{
-			h1neurons[i] = 0;
-		}
-		for (int i = 0; i < h2Dim; i++)
-		{
-			h2neurons[i] = 0;
-		}
-		for (int i = 0; i<outputDim;i++)
-		{
-			output[i] = 0;
-		}
+	  for (int i = 0; i < totalW; i++){
+      weights[i] = 0.0;
+  }	
+	  for (int i = 0; i < totalB; i++){
+      biases[i] = 0.0;
+  }	
 	}
 	
 	void saveModelText(string filename) {

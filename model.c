@@ -19,7 +19,6 @@ void countParameters(int* tw, int* tb){
 // add up total amount of weights and biases
 // may regret refactoring this code like this in a minute...
 float error = 0;
-float* output;
 float rando() { return (float)rand()/RAND_MAX; } //[0,1]
 
 float ReLU(float x) {return x>0.0 ? x:0.0;}
@@ -43,18 +42,21 @@ void setZero()
   }
 }
 
-int initialize(int* topology, int depth)
+int init(int* topology, int depth, float** weights, float** biases)
 {
   countParameters(&totalW, &totalB);
-  weights = malloc(sizeof(float) * totalW);
-  biases = malloc(sizeof(float) * totalB);
+  *weights = malloc(sizeof(float) * totalW);
+  *biases = malloc(sizeof(float) * totalB);
   setZero();
+}
+int randomize(int* topology, int depth, float* weights, float* biases)
+{
   srand(time(0));
   for (int i = 0 ; i < totalW ; i++){
-    weights[i] = random();
+    weights[i] = rando();
   }
   for (int i = 0 ; i < totalB ; i++){
-    biases[i] = random();
+    biases[i] = rando();
   }
 }
 // 	void forwardProp(float input[inputDim])
@@ -170,6 +172,7 @@ int initialize(int* topology, int depth)
 
 int main()
 {
+  float output[topology[depth-1]];
 	int EPOCHS = 100;
 	const int batchSize = 15;
 	float input[batchSize][inputDim];

@@ -19,7 +19,7 @@ void countParameters(int* tw, int* tb){
 // add up total amount of weights and biases
 // may regret refactoring this code like this in a minute...
 float error = 0;
-float rando() { return (float)rand()/RAND_MAX; } //[0,1]
+float rando() { return 2*((float)rand()/RAND_MAX)-1; } //[0,1]
 
 float ReLU(float x) {return x>0.0 ? x:0.0;}
 float dReLU(float x) {return x>0.0 ? 1.0:0.0;}
@@ -166,7 +166,10 @@ int randomize(int* topology, int depth, float* weights, float* biases){
 // 	float eta = .005;
 // 	//float alpha =  .2;
 
-	
+void printModel(){
+  printArr(totalW, weights);
+  printArr(totalB, biases);
+}	
 
 int main()
 {
@@ -180,7 +183,8 @@ int main()
   printf("W: %d, B: %d\n", totalW, totalB);
   printArr(totalW, weights);
   printArr(totalB, biases);
-
+  randomize(topology, depth, weights, biases);
+  printModel();
 	//cout << stockbear.predict(input) << endl;
 	// float errorE = 10;
 	// 	for (int i = 0; i<EPOCHS; i++)

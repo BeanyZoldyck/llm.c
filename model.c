@@ -32,7 +32,7 @@ void printArr(int n, float arr[])
   printf("\n");
 }
 
-void setZero() 
+void setZero(float* weights, float* biases)) 
 {
   for (int i = 0; i < totalW; i++){
     weights[i] = 0.0;
@@ -47,7 +47,7 @@ int init(int* topology, int depth, float** weights, float** biases)
   countParameters(&totalW, &totalB);
   *weights = malloc(sizeof(float) * totalW);
   *biases = malloc(sizeof(float) * totalB);
-  setZero();
+  setZero(weights, biases);
 }
 int randomize(int* topology, int depth, float* weights, float* biases)
 {
@@ -175,21 +175,21 @@ int main()
   float output[topology[depth-1]];
 	int EPOCHS = 100;
 	const int batchSize = 15;
-	float input[batchSize][inputDim];
+	float input[batchSize][topology[0]];
 	float target[batchSize];
 	float XOR[12] = {0.0,0.0,0.0,0.0,1.0,1.0,1.0,0.0,1.0,1.0,1.0,0.0};
 	//cout << stockbear.predict(input) << endl;
-	float errorE = 10;
-		for (int i = 0; i<EPOCHS; i++)
-		{	
-			loadIO(batchSize, input, target);
-			//cout<< input[0] <<input[1]<<target[0]<<endl;
-			//stockbear.forwardProp(input);
-			stockbear.backProp(target, input, batchSize);
-			cout << "Epoch " << i+1 << "'s error: " << stockbear.error << endl;
-			//cout<<"epoch " << i<< " ";
-		}
+	// float errorE = 10;
+	// 	for (int i = 0; i<EPOCHS; i++)
+	// 	{	
+	// 		loadIO(batchSize, input, target);
+	// 		//cout<< input[0] <<input[1]<<target[0]<<endl;
+	// 		//stockbear.forwardProp(input);
+	// 		stockbear.backProp(target, input, batchSize);
+	// 		cout << "Epoch " << i+1 << "'s error: " << stockbear.error << endl;
+	// 		//cout<<"epoch " << i<< " ";
+	// 	}
 	//cout << endl << stockbear.error << endl;
-	stockbear.saveModelText("stockbear.h");//parse with python
+
 	return 0;
 }

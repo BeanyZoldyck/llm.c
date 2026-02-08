@@ -23,7 +23,7 @@ float rando() { return (float)rand()/RAND_MAX; } //[0,1]
 
 float ReLU(float x) {return x>0.0 ? x:0.0;}
 float dReLU(float x) {return x>0.0 ? 1.0:0.0;}
-void printArr(int n, float arr[])
+void printArr(int n, float* arr)
 {
 	for (int i = 0; i < n; i++)
 	{
@@ -32,7 +32,7 @@ void printArr(int n, float arr[])
   printf("\n");
 }
 
-void setZero(float* weights, float* biases)) 
+void setZero() 
 {
   for (int i = 0; i < totalW; i++){
     weights[i] = 0.0;
@@ -42,15 +42,13 @@ void setZero(float* weights, float* biases))
   }
 }
 
-int init(int* topology, int depth, float** weights, float** biases)
-{
+int initialize(int* topology, int depth, float** weights, float** biases){
   countParameters(&totalW, &totalB);
   *weights = malloc(sizeof(float) * totalW);
   *biases = malloc(sizeof(float) * totalB);
-  setZero(weights, biases);
+  setZero();
 }
-int randomize(int* topology, int depth, float* weights, float* biases)
-{
+int randomize(int* topology, int depth, float* weights, float* biases){
   srand(time(0));
   for (int i = 0 ; i < totalW ; i++){
     weights[i] = rando();
@@ -178,6 +176,11 @@ int main()
 	float input[batchSize][topology[0]];
 	float target[batchSize];
 	float XOR[12] = {0.0,0.0,0.0,0.0,1.0,1.0,1.0,0.0,1.0,1.0,1.0,0.0};
+  initialize(topology, depth, &weights, &biases);
+  printf("W: %d, B: %d\n", totalW, totalB);
+  printArr(totalW, weights);
+  printArr(totalB, biases);
+
 	//cout << stockbear.predict(input) << endl;
 	// float errorE = 10;
 	// 	for (int i = 0; i<EPOCHS; i++)

@@ -6,8 +6,16 @@ const int h2Dim = 32;
 const int outputDim = 1;
 
 int[] topology = {2, 3, 2, 1};
-int depth = 4;
-float ** layers = mallac(sizeof(float*)*depth);
+int depth = 4; //length of topology
+float* weights;
+int totalW = 0;
+int totalB = 0;
+for (int i = 0; i < depth-1; i++) total += topology[i]*topology[i+1];
+for (int i = 0; i < depth; i++) totalB += topology[i];
+weights = malloc(sizeof(float) * totalW);
+biases = malloc(sizeof(float) * totalB);
+// add up total amount of weights and biases
+// may regret refactoring this code like this in a minute...
 float error = 0;
 float output[topoogy[depth-1]];
 float random() { return 2*(rand()/float(RAND_MAX))-1; }

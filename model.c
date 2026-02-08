@@ -10,8 +10,10 @@ int topology[] = {2, 3, 2, 1};
 int depth = 4; //length of topology
 float* weights;
 float* biases;
+float* neurons;
 int totalW = 0;
 int totalB = 0;
+
 void countParameters(int* tw, int* tb){
   for (int i = 0; i < depth-1; i++) *tw += topology[i]*topology[i+1];
   for (int i = 0; i < depth; i++) *tb += topology[i];
@@ -34,21 +36,19 @@ void printArr(int n, float* arr)
 
 void setZero() 
 {
-  for (int i = 0; i < totalW; i++){
-    weights[i] = 0.0;
-  }
   for (int i = 0; i < totalB; i++){
-    biases[i] = 0.0;
+    neurons[i] = 0.0;
   }
 }
 
-int initialize(int* topology, int depth, float** weights, float** biases){
+int initialize(int* topology, int depth, float** weights, float** biases, float** neurons){
   countParameters(&totalW, &totalB);
   *weights = malloc(sizeof(float) * totalW);
   *biases = malloc(sizeof(float) * totalB);
+  *neurons = malloc(sizeof(float)*totalB);
   setZero();
 }
-int randomize(int* topology, int depth, float* weights, float* biases){
+int randomize(int* topology, int depth){
   srand(time(0));
   for (int i = 0 ; i < totalW ; i++){
     weights[i] = rando();
@@ -57,41 +57,42 @@ int randomize(int* topology, int depth, float* weights, float* biases){
     biases[i] = rando();
   }
 }
-// 	void forwardProp(float input[inputDim])
+// void forwardProp(int* topology, int depth, float* input)
+// {
+//   setZero();
+//   // set input layer
+// 	for (int i = 0; i < totalW[0]; i++)
 // 	{
-// 		StockBear::setZero();
-// 		for (int i = 0; i < inputDim;i++)
-// 		{
-// 			inputLayer[i] = input[i];
-// 		}
-// 		for (int i = 0; i < h1Dim; i++)
-// 		{
-// 			for (int j = 0; j < inputDim; j++)
-// 			{
-// 				h1neurons[i] += input[j] * h1weights[j][i];
-// 			}
-// 			h1neurons[i] += h1biases[i];
-// 			h1neurons[i] = ReLU(h1neurons[i]);
-// 		}
-// 		for (int i = 0; i < h2Dim; i++)
-// 		{
-// 			for (int j = 0; j < h1Dim; j++)
-// 			{
-// 				h2neurons[i] += h1neurons[j] * h2weights[j][i];
-// 			}
-// 			h2neurons[i] += h2biases[i];
-// 			h2neurons[i] = ReLU(h2neurons[i]);
-// 		}
-// 		for (int i = 0; i < outputDim; i++)
-// 		{
-// 			for (int j = 0; j < h2Dim; j++)
-// 			{
-// 				output[i] += h2neurons[j] * outweights[j][i];
-// 			}
-// 			output[i] += outbiases[i]; //linear output when doing regression
-// 		}
-//
+// 		weights[i] = input[i];
 // 	}
+// 	for (int i = 0; i < h1Dim; i++)
+// 	{
+// 		for (int j = 0; j < inputDim; j++)
+// 		{
+// 			h1neurons[i] += input[j] * h1weights[j][i];
+// 		}
+// 		h1neurons[i] += h1biases[i];
+// 		h1neurons[i] = ReLU(h1neurons[i]);
+// 	}
+// 	for (int i = 0; i < h2Dim; i++)
+// 	{
+// 		for (int j = 0; j < h1Dim; j++)
+// 		{
+// 			h2neurons[i] += h1neurons[j] * h2weights[j][i];
+// 		}
+// 		h2neurons[i] += h2biases[i];
+// 		h2neurons[i] = ReLU(h2neurons[i]);
+// 	}
+// 	for (int i = 0; i < outputDim; i++)
+// 	{
+// 		for (int j = 0; j < h2Dim; j++)
+// 		{
+// 			output[i] += h2neurons[j] * outweights[j][i];
+// 		}
+// 		output[i] += outbiases[i]; //linear output when doing regression
+// 	}
+//
+// }
 // 	void backProp(float target[], float inputs[][inputDim], int batchSize) {
 //     // Accumulate gradients over the mini-batch
 //     float outputGradients[outputDim] = {0.0};
@@ -169,6 +170,7 @@ int randomize(int* topology, int depth, float* weights, float* biases){
 void printModel(){
   printArr(totalW, weights);
   printArr(totalB, biases);
+  printArr(totalB, neurons);
 }	
 
 int main()
@@ -179,11 +181,11 @@ int main()
 	float input[batchSize][topology[0]];
 	float target[batchSize];
 	float XOR[12] = {0.0,0.0,0.0,0.0,1.0,1.0,1.0,0.0,1.0,1.0,1.0,0.0};
-  initialize(topology, depth, &weights, &biases);
+  initialize(topology, depth, &weights, &biases, &neurons);
   printf("W: %d, B: %d\n", totalW, totalB);
   printArr(totalW, weights);
   printArr(totalB, biases);
-  randomize(topology, depth, weights, biases);
+  randomize(topology, depth);
   printModel();
 	//cout << stockbear.predict(input) << endl;
 	// float errorE = 10;
